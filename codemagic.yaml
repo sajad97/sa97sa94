@@ -5,7 +5,7 @@
 # In Codemagic UI go to: Team settings > codemagic.yaml settings
 # > Code signing identities and upload:
 #   - iOS certificate: Apple Distribution (.p12 + password)
-#       Reference name must be: ALEE_DISTRIBUTION_CERT
+#       Reference name must be: Alee_AppStore
 #   - iOS provisioning profile: App Store profile for
 #       com.alee.shein (.mobileprovision)
 #       Reference name must be: alee_app_store
@@ -34,7 +34,7 @@ workflows:
         provisioning_profiles:
           - alee_app_store
         certificates:
-          - ALEE_DISTRIBUTION_CERT
+          - Alee_AppStore
       vars:
         BUNDLE_ID: com.alee.shein
         APPLE_TEAM_ID: NUQ5XHT8NT
