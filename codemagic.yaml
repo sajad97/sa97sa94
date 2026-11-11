@@ -8,7 +8,7 @@
 #       Reference name must be: ALEE_DISTRIBUTION_CERT
 #   - iOS provisioning profile: App Store profile for
 #       com.alee.shein (.mobileprovision)
-#       Reference name must be: ALEE_APP_STORE_PROFILE
+#       Reference name must be: alee_app_store
 # The ios_signing block below only FETCHES those uploaded files
 # onto the build machine. It does NOT create them.
 # xcode-project use-profiles then applies them to Runner.xcodeproj
@@ -32,7 +32,7 @@ workflows:
         # Fetch the identities uploaded in Codemagic UI by their
         # reference names (see header). These are NOT auto-created.
         provisioning_profiles:
-          - ALEE_APP_STORE_PROFILE
+          - alee_app_store
         certificates:
           - ALEE_DISTRIBUTION_CERT
       vars:
