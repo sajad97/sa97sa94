@@ -1,0 +1,88 @@
+# ============================================================
+# Codemagic — Alee Customer App (iOS App Store build)
+#
+# Signing: automatic via the App Store Connect integration.
+# In Codemagic UI go to: Teams > Integrations > App Store Connect
+# and add an integration named e.g. "alee_app_store_connect"
+# using an App Store Connect API key (.p8 + Key ID + Issuer ID)
+# with role "App Manager" (or Admin) on team NUQ5XHT8NT.
+# Codemagic then auto-creates the Apple Distribution certificate
+# and App Store provisioning profile for com.alee.shein.
+# No keys or certificates are stored in this repository.
+#
+# Builds are triggered on push; the IPA is stored in build
+# artifacts only. Nothing is uploaded or submitted to review.
+# ============================================================
+
+workflows:
+  ios-app-store-ipa:
+    name: Alee iOS App Store IPA
+    instance_type: mac_mini_m2
+    max_build_duration: 120
+    environment:
+      flutter: "3.44.2"   # must match pubspec.lock resolution (>=3.41.0)
+      xcode: latest
+      cocoapods: default
+      ios_signing:
+        distribution_type: app_store          # App Store Distribution
+        bundle_identifier: com.alee.shein
+      vars:
+        BUNDLE_ID: com.alee.shein
+        APPLE_TEAM_ID: NUQ5XHT8NT
+    triggering:
+      events:
+        - push
+      cancel_previous_builds: true
+    cache:
+      cache_paths:
+        - $FLUTTER_ROOT/.pub-cache
+        - $HOME/Library/Caches/CocoaPods
+    scripts:
+      - name: Locate Flutter project and install dependencies
+        script: |
+          set -euo pipefail
+          if [ -f pubspec.yaml ]; then
+            PROJ="."
+          else
+            PROJ="$(dirname "$(find . -maxdepth 3 -name pubspec.yaml -not -path '*/build/*' | head -n1)")"
+          fi
+          echo "Flutter project dir: $PROJ"
+          echo "PROJECT_DIR=$PROJ" > .cm_project_dir
+          cd "$PROJ"
+          flutter pub get
+      - name: Install CocoaPods
+        script: |
+          set -euo pipefail
+          PROJ="$(cut -d= -f2 .cm_project_dir)"
+          cd "$PROJ/ios"
+          pod install
+      - name: Build signed IPA (App Store distribution)
+        script: |
+          set -euo pipefail
+          PROJ="$(cut -d= -f2 .cm_project_dir)"
+          cd "$PROJ"
+          # Build 11 was the last produced. Offset by 12 so every CI
+          # build number is > 11 and unique across runs.
+          BUILD_NUM=$(( ${PROJECT_BUILD_NUMBER:-0} + 12 ))
+          echo "Version 4.3.1 — build number: $BUILD_NUM"
+          flutter build ipa --release \
+            --build-name=4.3.1 \
+            --build-number="$BUILD_NUM" \
+            --export-options-plist ios/ExportOptions.plist
+      - name: Verify signing and version
+        script: |
+          set -euo pipefail
+          PROJ="$(cut -d= -f2 .cm_project_dir)"
+          cd "$PROJ"
+          IPA=$(ls build/ios/ipa/*.ipa | head -1)
+          echo "IPA: $IPA"
+          TMP=$(mktemp -d)
+          unzip -q "$IPA" -d "$TMP"
+          APP="$TMP/Payload/Runner.app"
+          codesign -dv --verbose=4 "$APP" 2>&1 | grep -E "Authority|TeamIdentifier|Identifier=" || true
+          /usr/libexec/PlistBuddy -c "Print :CFBundleShortVersionString" "$APP/Info.plist"
+          /usr/libexec/PlistBuddy -c "Print :CFBundleVersion" "$APP/Info.plist"
+          /usr/libexec/PlistBuddy -c "Print :CFBundleIdentifier" "$APP/Info.plist"
+    artifacts:
+      - "**/*.ipa"
+    # publishing: intentionally omitted — no upload, no review submission.

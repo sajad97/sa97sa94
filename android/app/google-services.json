@@ -1,0 +1,191 @@
+{
+  "project_info": {
+    "project_number": "14202958838",
+    "project_id": "alee-2e367",
+    "storage_bucket": "alee-2e367.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:14202958838:android:375b866f02471757df8dd7",
+        "android_client_info": {
+          "package_name": "com.aleeshein.adminapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "14202958838-a5n809rhpgivlqk8m2dilfiv59ao6u4s.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.aleeshein.adminapp",
+            "certificate_hash": "2e16d1a2c7903d03487a73a3c3bc2863280a16b9"
+          }
+        },
+        {
+          "client_id": "14202958838-cnpm89avedk7g43jm8pshpkpeb88g4gb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.aleeshein.adminapp",
+            "certificate_hash": "e495bf33daf5963d4087c3de5aa041465551e420"
+          }
+        },
+        {
+          "client_id": "14202958838-47pkf95bg9qhau1e2qpbhjsqf4eakgi6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCtuMgjdMvDW4dZx612fTJgk99r_fgNO2o"
+        },
+        {
+          "current_key": "AIzaSyBWsdl_Y0f7m2ibsGh94kWRF_y6RihCGT8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "14202958838-47pkf95bg9qhau1e2qpbhjsqf4eakgi6.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "14202958838-032h3n5tvef2hci5kn0biolviu5r99gd.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.alee.sheindeliveryboy"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:14202958838:android:592d7ed53a4c906ddf8dd7",
+        "android_client_info": {
+          "package_name": "com.aleeshein.customer"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "14202958838-g7mh0606l2662gqtd8i5on874g3r9fij.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.aleeshein.customer",
+            "certificate_hash": "4cd56deeeb4613231f689af5e46f5e76e2ec2da2"
+          }
+        },
+        {
+          "client_id": "14202958838-i6hb22qjja5mo1f1fo23vdp5c5s1r3vo.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.aleeshein.customer",
+            "certificate_hash": "f0be2585009f25db7ed030345b84d940db1b8443"
+          }
+        },
+        {
+          "client_id": "14202958838-qg3rvdsm72ug5l93cqd4l6du5p7vsb5b.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.aleeshein.customer",
+            "certificate_hash": "3ac8c06e734fd3d1661993681f5cd1371cadbfea"
+          }
+        },
+        {
+          "client_id": "14202958838-s141gdioeu9kfhib4l4jvufp4d6hbq6h.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.aleeshein.customer",
+            "certificate_hash": "66d8b66e93198c8465e302c0c287202c6d2988a1"
+          }
+        },
+        {
+          "client_id": "14202958838-47pkf95bg9qhau1e2qpbhjsqf4eakgi6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCtuMgjdMvDW4dZx612fTJgk99r_fgNO2o"
+        },
+        {
+          "current_key": "AIzaSyBWsdl_Y0f7m2ibsGh94kWRF_y6RihCGT8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "14202958838-47pkf95bg9qhau1e2qpbhjsqf4eakgi6.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "14202958838-032h3n5tvef2hci5kn0biolviu5r99gd.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.alee.sheindeliveryboy"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:14202958838:android:ff1370472a4441b0df8dd7",
+        "android_client_info": {
+          "package_name": "com.aleeshein.deliveryboy"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "14202958838-0sodhbc2npghg7do3hnveoiinc4uat63.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.aleeshein.deliveryboy",
+            "certificate_hash": "aae3f3111cd6102510f017869f8d24c0b156ecca"
+          }
+        },
+        {
+          "client_id": "14202958838-3gtrk605dmpgcv6lcl2jg7pkqsomjv98.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.aleeshein.deliveryboy",
+            "certificate_hash": "1829428af6ad84ee3a7d98d6812736de671ed9d9"
+          }
+        },
+        {
+          "client_id": "14202958838-47pkf95bg9qhau1e2qpbhjsqf4eakgi6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCtuMgjdMvDW4dZx612fTJgk99r_fgNO2o"
+        },
+        {
+          "current_key": "AIzaSyBWsdl_Y0f7m2ibsGh94kWRF_y6RihCGT8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "14202958838-47pkf95bg9qhau1e2qpbhjsqf4eakgi6.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "14202958838-032h3n5tvef2hci5kn0biolviu5r99gd.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.alee.sheindeliveryboy"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
