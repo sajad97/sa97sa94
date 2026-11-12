@@ -39,8 +39,12 @@ workflows:
         # reference names (see header). These are NOT auto-created.
         provisioning_profiles:
           - alee_app_store
+        # Both certificate names are fetched: the two uploaded
+        # alee_app_store profiles are tied to different uploaded
+        # certificates, and every fetched profile needs its cert.
         certificates:
           - Alee_AppStore
+          - alee_app_store_connect
       vars:
         BUNDLE_ID: com.alee.shein
         APPLE_TEAM_ID: NUQ5XHT8NT
