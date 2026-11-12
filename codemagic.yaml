@@ -19,7 +19,7 @@
 # (appears under TestFlight / build list). It is NOT submitted for
 # review automatically — submit manually from App Store Connect.
 # Upload uses the App Store Connect API key integration named
-# "Alee_ASC" (Team settings > Team integrations > Developer Portal).
+# "alee_app_store_connect" (Team settings > Team integrations > Developer Portal).
 # Manual builds only (no automatic triggers).
 # ============================================================
 
@@ -29,7 +29,7 @@ workflows:
     instance_type: mac_mini_m2
     max_build_duration: 120
     integrations:
-      app_store_connect: Alee_ASC
+      app_store_connect: alee_app_store_connect
     environment:
       flutter: "3.44.2"   # must match pubspec.lock resolution (>=3.41.0)
       xcode: latest
