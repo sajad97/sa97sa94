@@ -125,3 +125,100 @@ workflows:
     artifacts:
       - "**/*.ipa"
     # publishing: intentionally omitted — no upload, no review submission.
+
+  # --------------------------------------------------------------
+  # READ-ONLY signing diagnostics — run manually when signing fails.
+  # Prints SHA-1 fingerprints of keychain identities, uploaded certs,
+  # and certs embedded in each provisioning profile, then matches
+  # them. No private keys, no passwords, nothing created/revoked.
+  # --------------------------------------------------------------
+  ios-signing-diagnostics:
+    name: iOS signing diagnostics (read-only)
+    instance_type: mac_mini_m2
+    max_build_duration: 20
+    environment:
+      ios_signing:
+        provisioning_profiles:
+          - alee_app_store
+        certificates:
+          - Alee_AppStore
+      vars:
+        BUNDLE_ID: com.alee.shein
+        APPLE_TEAM_ID: NUQ5XHT8NT
+    scripts:
+      - name: Inspect signing identities vs provisioning profiles
+        script: |
+          # Read-only diagnostics — fingerprints only.
+          set -uo pipefail
+
+          echo "===== 1) Signing identities (cert WITH private key) ====="
+          security find-identity -v -p codesigning || echo "(none found)"
+
+          echo ""
+          echo "===== 2) All certificates in keychain (may lack private key) ====="
+          security find-certificate -a -Z 2>/dev/null | grep -E 'SHA-1 hash|labl' || echo "(none)"
+
+          CERTS_DIR="$HOME/Library/MobileDevice/Certificates"
+          echo ""
+          echo "===== 3) Uploaded certificate files: $CERTS_DIR ====="
+          for cf in "$CERTS_DIR"/*; do
+            [ -e "$cf" ] || continue
+            echo "--- $(basename "$cf")"
+            case "$cf" in
+              *.p12|*.P12)
+                echo "  (.p12 container — skipped, password-protected)" ;;
+              *)
+                openssl x509 -inform der -in "$cf" -noout -subject -fingerprint -sha1 2>/dev/null \
+                  || openssl x509 -in "$cf" -noout -subject -fingerprint -sha1 2>/dev/null \
+                  || echo "  (not a readable .cer/.pem)" ;;
+            esac
+          done
+
+          echo ""
+          echo "===== 4) Provisioning profiles ====="
+          CERTFPS_FILE="$(mktemp)"
+          : > "$CERTFPS_FILE"
+          FOUND_PROF=0
+          for prof in "$HOME/Library/MobileDevice/Provisioning Profiles"/*.mobileprovision \
+                      "$HOME/Library/Developer/Xcode/UserData/Provisioning Profiles"/*.mobileprovision; do
+            [ -e "$prof" ] || continue
+            FOUND_PROF=1
+            echo "--- $(basename "$prof") ---"
+            TMPD=$(mktemp -d)
+            if security cms -D -i "$prof" -o "$TMPD/profile.plist" 2>/dev/null; then
+              for k in Name UUID ExpirationDate; do
+                v=$(/usr/libexec/PlistBuddy -c "Print :$k" "$TMPD/profile.plist" 2>/dev/null) && echo "  $k: $v"
+              done
+              v=$(/usr/libexec/PlistBuddy -c "Print :TeamIdentifier:0" "$TMPD/profile.plist" 2>/dev/null) && echo "  TeamIdentifier: $v"
+              v=$(/usr/libexec/PlistBuddy -c "Print :Entitlements:aps-environment" "$TMPD/profile.plist" 2>/dev/null) && echo "  aps-environment: $v"
+              i=0
+              while plutil -extract "DeveloperCertificates.$i" raw -o "$TMPD/cert$i.der" "$TMPD/profile.plist" 2>/dev/null; do
+                fp=$(openssl x509 -inform der -in "$TMPD/cert$i.der" -noout -fingerprint -sha1 | cut -d= -f2 | tr -d ':' | tr 'a-f' 'A-F')
+                echo "    cert[$i] SHA-1: $fp"
+                echo "$fp" >> "$CERTFPS_FILE"
+                i=$((i+1))
+              done
+              echo "  DeveloperCertificates: $i"
+            else
+              echo "  (cannot decode profile)"
+            fi
+          done
+          [ "$FOUND_PROF" -eq 1 ] || echo "(no .mobileprovision files installed)"
+
+          echo ""
+          echo "===== 5) Identity vs profile match ====="
+          IDFPS=$(security find-identity -v -p codesigning 2>/dev/null | grep -oE '[0-9A-F]{40}' | sort -u)
+          if [ -z "$IDFPS" ]; then
+            echo "RESULT: no signing identities with private keys in keychain"
+          else
+            ANY=0
+            for fp in $IDFPS; do
+              if grep -q "$fp" "$CERTFPS_FILE"; then
+                echo "MATCH    : identity $fp IS covered by a provisioning profile"
+                ANY=1
+              else
+                echo "NO MATCH : identity $fp is NOT covered by any provisioning profile"
+              fi
+            done
+            [ "$ANY" -eq 1 ] || echo "RESULT: no keychain identity is inside any profile -> profile was issued for a different certificate"
+          fi
