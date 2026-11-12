@@ -15,7 +15,11 @@
 # and generates the ExportOptions.plist used for the IPA export.
 #
 # No keys, certificates or profiles are stored in this repository.
-# IPA is stored in build artifacts only — no upload, no review.
+# After a successful build the IPA is uploaded to App Store Connect
+# (appears under TestFlight / build list). It is NOT submitted for
+# review automatically — submit manually from App Store Connect.
+# Upload uses the App Store Connect API key integration named
+# "Alee_ASC" (Team settings > Team integrations > Developer Portal).
 # Manual builds only (no automatic triggers).
 # ============================================================
 
@@ -24,6 +28,8 @@ workflows:
     name: Alee iOS App Store IPA
     instance_type: mac_mini_m2
     max_build_duration: 120
+    integrations:
+      app_store_connect: Alee_ASC
     environment:
       flutter: "3.44.2"   # must match pubspec.lock resolution (>=3.41.0)
       xcode: latest
@@ -124,7 +130,13 @@ workflows:
           echo "identifier/version checks: PASS"
     artifacts:
       - "**/*.ipa"
-    # publishing: intentionally omitted — no upload, no review submission.
+    publishing:
+      app_store_connect:
+        auth: integration
+        # Upload only. No automatic TestFlight beta review and no
+        # automatic App Store review submission.
+        submit_to_testflight: false
+        submit_to_app_store: false
 
   # --------------------------------------------------------------
   # READ-ONLY signing diagnostics — run manually when signing fails.
