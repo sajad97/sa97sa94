@@ -138,10 +138,11 @@ workflows:
     max_build_duration: 20
     environment:
       ios_signing:
-        provisioning_profiles:
-          - alee_app_store
-        certificates:
-          - Alee_AppStore
+        # Auto-match by type + bundle id (Developer Portal integration),
+        # NOT by uploaded reference names — shows which cert/profile
+        # pair Codemagic actually resolves for app_store/com.alee.shein.
+        distribution_type: app_store
+        bundle_identifier: com.alee.shein
       vars:
         BUNDLE_ID: com.alee.shein
         APPLE_TEAM_ID: NUQ5XHT8NT
